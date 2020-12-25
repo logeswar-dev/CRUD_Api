@@ -31,10 +31,28 @@ router.delete('/:id' , (req, res) => {
     const {id} = req.params;
 
     users = users.filter((user)=>{
-        user.id !== id
+        user.id !== id;
     })
 
     res.send("user Id deleted " + id )
+})
+
+router.patch('/:id' , (req , res) => {
+    const {id} = req.params;
+
+    const { name , age } = req.body;
+
+    const user = users.find((user)=> { user.id == id})
+
+    if(name){
+        user.name = name;
+    }
+
+    if(age){
+        user.age = age;
+    }
+
+    res.send(`changed ${id}`)
 })
 
 export default router;
