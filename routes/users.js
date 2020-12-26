@@ -1,58 +1,18 @@
 import express from 'express'
-import { v4 as uuidv4 } from 'uuid';
+import { createUser , getUsers , getUser , deleteUser , updateUser } from '../controllers/users.js'
 
 const router = express.Router()
 
 let users = []
 
-router.get('/' , (req , res) => {
-    res.send(users)
-})
+router.get('/' , getUsers )
 
-router.post('/' , (req , res) => {
-    const user = req.body;
+router.post('/' , createUser)
 
-    const withUserId = { ...user , id : uuidv4()}
+router.get('/:id', getUser)
 
-    users.push(withUserId);
-    res.send("The User has been pushed" + user.name + "and the age of the user is" + user.age)
-})
+router.delete('/:id' , deleteUser)
 
-router.get('/:id', (req ,res) => {
-
-    const {id} = req.params;
-
-    const foundUser = users.find((user) => user.id === id);
-     
-    res.send(foundUser)
-})
-
-router.delete('/:id' , (req, res) => {
-    const {id} = req.params;
-
-    users = users.filter((user)=>{
-        user.id !== id;
-    })
-
-    res.send("user Id deleted " + id )
-})
-
-router.patch('/:id' , (req , res) => {
-    const {id} = req.params;
-
-    const { name , age } = req.body;
-
-    const user = users.find((user)=> { user.id == id})
-
-    if(name){
-        user.name = name;
-    }
-
-    if(age){
-        user.age = age;
-    }
-
-    res.send(`changed ${id}`)
-})
+router.patch('/:id' , updateUser)
 
 export default router;
